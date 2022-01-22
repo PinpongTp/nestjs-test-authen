@@ -2,6 +2,7 @@ import { Controller, Request, Post, Get, UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { RolesGuard } from './auth/roles.guard';
 
 @Controller()
 export class AppController {
@@ -12,6 +13,7 @@ export class AppController {
     async login(@Request() req: any) {
 
         // ?? ยังไม่เข้าใจว่า ถูกส่งไปที่ auth service ได้อย่างไร
+        // ?? เป็นเพราะ passport ในไฟล local.strategy.ts
         console.log(req)
         console.log('>>> user <<<<')
         console.log(req.user)
@@ -20,7 +22,7 @@ export class AppController {
     }
 
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Get('profile')
     getProfile(@Request() req: any) {
         return req.user;

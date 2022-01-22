@@ -3,9 +3,29 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from './config/configuration';
+import { MongooseModule } from '@nestjs/mongoose';
+import { TodoModule } from './todo/todo.module';
 @Module({
-  imports: [AuthModule, UsersModule],
+  imports: [
+    AuthModule, 
+    UsersModule,
+    ConfigModule.forRoot({
+      envFilePath: '.development.env', // for use config in .env file
+      load: [configuration], // for use config in ./config/configuration.ts file
+      isGlobal: true,
+    }), 
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule.forRoot()],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get('MONGODB_URL'),
+      }),
+      inject: [ConfigService]
+    }),
+    // MongooseModule.forRoot('mongodb://root:example@localhost:27017'), 
+    TodoModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
