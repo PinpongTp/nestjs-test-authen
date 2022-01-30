@@ -8,7 +8,7 @@ import { RolesGuard } from './auth/roles.guard';
 export class AppController {
     constructor(private authService: AuthService) { }
 
-    @UseGuards(LocalAuthGuard) // ใช้ guard ที่สร้างขึ้นเอง
+    // @UseGuards(LocalAuthGuard) // ใช้ guard ที่สร้างขึ้นเอง
     @Post('auth/login')
     async login(@Request() req: any) {
 
@@ -22,7 +22,7 @@ export class AppController {
     }
 
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
+    // @UseGuards(JwtAuthGuard, RolesGuard)
     @Get('profile')
     getProfile(@Request() req: any) {
         return req.user;

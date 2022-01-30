@@ -10,15 +10,33 @@ import { TodoModule } from './todo/todo.module';
 import { NoteController } from './note/note.controller';
 import { NoteService } from './note/note.service';
 import { NoteModule } from './note/note.module';
+import { SequelizeModule } from '@nestjs/sequelize'
+
+
+// model
+
+import { Note } from './note/entities/note.entity';
 @Module({
   imports: [
-    AuthModule, 
+    AuthModule,
     UsersModule,
     ConfigModule.forRoot({
-      envFilePath: '.development.env', // for use config in .env file
+      envFilePath: '.env', // for use config in .env file
       load: [configuration], // for use config in ./config/configuration.ts file
       isGlobal: true,
-    }), 
+    }),
+    SequelizeModule.forRoot({
+      dialect: 'postgres',
+      host: process.env.DATABASE_HOST,
+      port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
+      models: [Note],
+      autoLoadModels: true,
+      synchronize: true,
+      logging: false,
+    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule.forRoot()],
       useFactory: async (configService: ConfigService) => ({
@@ -26,11 +44,11 @@ import { NoteModule } from './note/note.module';
       }),
       inject: [ConfigService]
     }),
-    // MongooseModule.forRoot('mongodb://root:example@localhost:27017'), 
+    MongooseModule.forRoot('mongodb://root:example@localhost:27017'),
     TodoModule,
     NoteModule
   ],
-  controllers: [AppController, NoteController],
-  providers: [AppService, NoteService],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
