@@ -7,6 +7,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TodoModule } from './todo/todo.module';
+import { NoteController } from './note/note.controller';
+import { NoteService } from './note/note.service';
+import { NoteModule } from './note/note.module';
 @Module({
   imports: [
     AuthModule, 
@@ -24,9 +27,10 @@ import { TodoModule } from './todo/todo.module';
       inject: [ConfigService]
     }),
     // MongooseModule.forRoot('mongodb://root:example@localhost:27017'), 
-    TodoModule
+    TodoModule,
+    NoteModule
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, NoteController],
+  providers: [AppService, NoteService],
 })
 export class AppModule {}
