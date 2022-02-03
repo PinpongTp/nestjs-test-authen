@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Note } from './entities/note.entity';
+import { Blog } from './entities/blog.entity';
 
 @Injectable()
 export class NoteService {
     constructor(
         @InjectModel(Note)
         private noteModel: typeof Note,
+        @InjectModel(Blog)
+        private blogModel: typeof Blog,
     ) {
         // super();
     }
@@ -40,6 +43,10 @@ export class NoteService {
         //     return 'error'
         // }
     }
+
+    // async findAll(): Promise<Blog[] | undefined> {
+    //     return await this.blogModel.findAll<Blog>();
+    // }
 
     async findAll(): Promise<Note[] | undefined> {
         return await this.noteModel.findAll<Note>();

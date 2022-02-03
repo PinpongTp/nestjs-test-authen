@@ -36,6 +36,9 @@ import { Note } from './note/entities/note.entity';
       autoLoadModels: true,
       synchronize: true,
       logging: false,
+      define: {
+        timestamps: false
+      }
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule.forRoot()],
